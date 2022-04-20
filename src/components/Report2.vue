@@ -9,7 +9,7 @@
 
     <div class="mt-4 card p-4">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6" v-show="country != 'All'">
           <div>
             <div class="image-flag mb-3 mt-1">
               <img
@@ -76,6 +76,46 @@
             </div>
           </div>
         </div>
+
+
+        <div class="col-md-6" v-show="country == 'All'">
+          <div>
+            <div class="image-flag mb-3 mt-1">
+              <img
+                v-if="this.country == 'All'"
+                src="https://disease.sh/assets/img/flags/th.png"
+                width="80px"
+              />
+              <img
+                v-if="this.country != 'All'"
+                :src="
+                  'https://disease.sh/assets/img/flags/' +
+                  this.country.toLowerCase() +
+                  '.png'
+                "
+                width="80px"
+              />
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <span class="title">ผู้ติดเชื้อภายในประเทศรวม</span>
+                <p class="case-number">
+                  {{ dataCountryObj.cases.toLocaleString() }}
+                </p>
+                <span class="title">ผู้ติดเชื้อวันนี้</span>
+                <p>+{{ dataCountryObj.todayCases.toLocaleString() }}</p>
+              </div>
+              <div class="col-md-6">
+                <span class="title">ผู้เสียชีวิตภายในประเทศรวม</span>
+                <p class="case-number">
+                  {{ dataCountryObj.deaths.toLocaleString() }}
+                </p>
+                <span class="title">ผู้เสียชีวิตวันนี้</span>
+                <p>+{{ dataCountryObj.todayDeaths.toLocaleString() }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -136,7 +176,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { abc, getTotal, getAll } from "../function/test2";
+import { callAPI, getTotal, getAll } from "../function/callapi";
 import countries from "../assets/countries.json";
 
 export default {
@@ -233,10 +273,8 @@ export default {
       this.dataCountryObj = await getTotal(country);
       this.dataAllObj = await getAll();
       // const dataObj = await this.report(days);
-      const dataObj = await abc(days, country);
+      const dataObj = await callAPI(days, country);
       this.dataTables = dataObj.dataTable
-
-      console.log("aabcc", this.dataTable);
 
       this.$refs.realtimeChart.updateSeries(
         [

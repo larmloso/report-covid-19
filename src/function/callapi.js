@@ -2,7 +2,7 @@
 
 import axios from "axios"
 
-async function abc(days, country) {
+async function callAPI(days, country) {
 
     if (country == 'All') {
         let { data } = await axios.get(`https://disease.sh/v3/covid-19/historical/all?lastdays=${days}`);
@@ -97,4 +97,4 @@ async function newCase(dataObj) {
     return newcaseList.reverse()
 }
 
-export { abc, getTotal, getAll };
+export { callAPI, getTotal, getAll };
